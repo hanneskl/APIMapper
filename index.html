@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>LiveFyre SDK</title>
+    <script type="text/javascript" src="js/mapper.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+<body>
+<script type = 'text/javascript'>
+
+    var url = "http://bootstrap.demo-accounts.fyre.co/bs3/demo-accounts.fyre.co/360984/Y3VzdG9tLTE0MDQ5MTMyMjE1NzI=/0.json";
+    $.ajax({
+        url: url
+    }).done(function(data) {
+
+        var myMap = [
+        	{
+        		"_path": "content",
+        		"url" : "childContent[0].content.oembed.url"
+        	}
+        ];
+
+        var finalObject = mapObject(myMap, data);
+
+        console.log("Finished");
+        console.log(JSON.stringify(finalObject));
+
+        document.getElementById("content").innerHTML = JSON.stringify(finalObject);
+
+    });
+</script>
+<div id="content"></div>
+</body>
+</html>

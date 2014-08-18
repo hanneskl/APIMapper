@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Testing Maper</title>
+
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css">
+    <script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+    <script src="../js/mapper.js"></script>
+
+    <script>
+        QUnit.test("Array basic parameters", function(assert) {
+
+            assert.equal(mapArray(), undefined);
+            assert.equal(mapArray(0), undefined);
+            assert.equal(mapArray(""), undefined);
+            assert.equal(mapArray({}), undefined);
+            assert.equal(mapArray([]), undefined);
+            assert.equal(mapArray([], 0), undefined);
+            assert.equal(mapArray([], ""), undefined);
+            assert.equal(mapArray([], []), undefined);
+        });
+
+        QUnit.test("Array correct values", function(assert) {
+
+            //SIMPLE
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "oldVariableName1"}], {"path1": [{"oldVariableName1": 1}]}), [{"newValue1": 1}]);
+            //FUNCTION
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "parseInt(oldVariableName1)"}], {"path1": [{"oldVariableName1": "1"}]}), [{"newValue1": 1}]);
+            // MULTIPLE VALUES
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "oldVariableName1", "newValue2": "oldVariableName2"}], {"path1": [{"oldVariableName1": 1, "oldVariableName2": "Hello"}, {"oldVariableName1": 2}]}), [{"newValue1": 1, newValue2: "Hello"}, {"newValue1": 2, newValue2: undefined}]);
+            //SIMPLE DOT SYNTAX
+            assert.deepEqual(mapArray([{"_path": "path1.path2", "newValue1": "oldVariableName1"}], {"path1": {"path2": [{"oldVariableName1": 1}]}}), [{"newValue1": 1}]);
+            //COMPLEX DOT SYNTAX WITH [0]
+            assert.deepEqual(mapArray([{"_path": "path1[0].path2", "newValue1": "oldVariableName1"}], {"path1": [{"path2": [{"oldVariableName1": 1}]}]}), [{"newValue1": 1}]);
+
+            //TODO: ADD [last()]
+            //TODO: ADD [last()-1]
+            //TODO: ADD [position()<3]
+            //TODO: ADD [lang]
+            //TODO: ADD [!lang]
+            //TODO: ADD [lang='en']
+            //TODO: ADD [lang!='en']
+            //TODO: ADD [price>35.00]
+            //TODO: ADD [price==35.00]
+            //TODO: ADD [price!=35.00]
+            //TODO: ADD [price<35.00]
+        });
+
+        QUnit.test("Array wrong values", function(assert) {
+
+            //MISSING VARIABLE FROM SOURCE
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "oldVariableName1"}], {"path1": []}), []);
+            //UNKOWN FUNCTION
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "unkownFunctionName1(oldVariableName1)"}], {"path1": [{"oldVariableName1": "1"}]}), [{"newValue1": undefined}]);
+            //FUNCTION: MISSING CLOSING BRACKET
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "parseInt(oldVariableName1"}], {"path1": [{"oldVariableName1": "1"}]}), [{"newValue1": undefined}]);
+            //FUNCTION: WRONG PARAMETER IN FUNCTION
+            assert.deepEqual(mapArray([{"_path": "path1", "newValue1": "parseInt(unKnownVariable)"}], {"path1": [{"oldVariableName1": "1"}]}), [{"newValue1": undefined}]);
+            //MISSING PATH
+            assert.deepEqual(mapArray([{"newValue1": "oldVariableName1"}]), undefined);
+            //MISSING VARIABLE FROM MAPPING
+            assert.deepEqual(mapArray([{"_path": "path1"}], {"path1": [{"oldVariableName1": 1}]}), undefined);
+            //SIMPLE DOT SYNTAX - WRONG PATH
+            assert.deepEqual(mapArray([{"_path": "path1.unKownPath", "newValue1": "oldVariableName1"}], {"path1": {"path2": [{"oldVariableName1": 1}]}}), undefined);
+            //SIMPLE DOT SYNTAX - WRONG VARIABLE WITH CORRECT PATH
+            assert.deepEqual(mapArray([{"_path": "path1.path2", "newValue1": "unkownVariableName1"}], {"path1": {"path2": [{"oldVariableName1": 1}]}}), [{"newValue1": undefined}]);
+            //COMPLEX DOT SYNTAX WITH [0] - WRONG PATH
+            assert.deepEqual(mapArray([{"_path": "path1[0].unkownPath", "newValue1": "oldVariableName1"}], {"path1": [{"path2": [{"oldVariableName1": 1}]}]}), undefined);
+            //COMPLEX DOT SYNTAX WITH [0] - WRONG INDEX
+            assert.deepEqual(mapArray([{"_path": "path1[999].path2", "newValue1": "oldVariableName1"}], {"path1": [{"path2": [{"oldVariableName1": 1}]}]}), undefined);
+            //COMPLEX DOT SYNTAX WITH [0] - WRONG WRONG NAME
+            assert.deepEqual(mapArray([{"_path": "path1[0].path2", "newValue1": "unkownVariableName1"}], {"path1": [{"path2": [{"oldVariableName1": 1}]}]}), [{"newValue1": undefined}]);
+        });
+
+        QUnit.test("Object basic parameters", function(assert) {
+
+            assert.equal(mapObject(), undefined);
+            assert.equal(mapObject(0), undefined);
+            assert.equal(mapObject(""), undefined);
+            assert.equal(mapObject({}), undefined);
+            assert.equal(mapObject([]), undefined);
+            assert.equal(mapObject([], 0), undefined);
+            assert.equal(mapObject([], ""), undefined);
+            assert.equal(mapObject([], []), undefined);
+        });
+
+        QUnit.test("Object correct values", function(assert) {
+
+            //SIMPLE
+            assert.deepEqual(mapObject({"newValue1": "oldVariableName1"}, {"oldVariableName1": 1}), {"newValue1": 1});
+            //FUNCTION
+            assert.deepEqual(mapObject({"newValue1": "parseInt(oldVariableName1)"}, {"oldVariableName1": "1"}), {"newValue1": 1});
+            // MULTIPLE VALUES
+            assert.deepEqual(mapObject({"newValue1": "oldVariableName1", "newValue2": "oldVariableName2"}, {"oldVariableName1": 1, "oldVariableName2": 2}), {"newValue1": 1, "newValue2": 2});
+            //SIMPLE DOT SYNTAX
+            assert.deepEqual(mapObject({"newValue1": "path1.oldVariableName1"}, {"path1": {"oldVariableName1": 1}}), {"newValue1": 1});
+            //COMPLEX DOT SYNTAX [0]
+            assert.deepEqual(mapObject({"newValue1": "path1[0].oldVariableName1"}, {"path1": [{"oldVariableName1": 1}]}), {"newValue1": 1});
+            //EVEN MORE COMPLEX DOT SYNTAX
+            assert.deepEqual(mapObject({"newValue1": "path1[0].path2[1].oldVariableName1"}, {"path1": [{"path2": [{"oldVariableName1": 1},{"oldVariableName1": 2}]}]}), {"newValue1": 2});
+
+        });
+
+        QUnit.test("Object wrong values", function(assert) {
+
+            //MISSING VARIABLE FROM SOURCE
+            assert.deepEqual(mapObject({"newValue1": "oldVariableName1", "newValue2": "oldVariableName2"}, {"oldVariableName1": 1}), {"newValue1": 1, "newValue2": undefined});
+            //FUNCTION MISSING CLOSING BRACKET
+            assert.deepEqual(mapObject({"newValue1": "parseInt(oldVariableName1"}, {"oldVariableName1": "1"}), {"newValue1": undefined});
+            //UNKOWN FUNCTION
+            assert.deepEqual(mapObject({"newValue1": "unkownFuntion(oldVariableName1)"}, {"oldVariableName1": "1"}), {"newValue1": undefined});
+            //SIMPLE DOT SYNTAX - WRONG PATH
+            assert.deepEqual(mapObject({"newValue1": "unkownPath1.oldVariableName1"}, {"path1": {"oldVariableName1": 1}}), {"newValue1": undefined});
+            //SIMPLE DOT SYNTAX - MISSING VARIABLE IN SOURCE
+            assert.deepEqual(mapObject({"newValue1": "path1.unkownVariableName1"}, {"path1": {"oldVariableName1": 1}}), {"newValue1": undefined});
+            //INDEX OUT OF SCOPT
+            assert.deepEqual(mapObject({"newValue1": "path1[999].oldVariableName1"}, {"path1": [{"oldVariableName1": 1}]}), {"newValue1": undefined});
+            //MISSING CLOSINGBRACKET
+            assert.deepEqual(mapObject({"newValue1": "path1[0.oldVariableName1"}, {"path1": [{"oldVariableName1": 1}]}), {"newValue1": undefined});
+            //UNKOWN VARIABLE
+            assert.deepEqual(mapObject({"newValue1": "path1[0].unkownVariableName1"}, {"path1": [{"oldVariableName1": 1}]}), {"newValue1": undefined});
+        });
+
+    </script>
+</head>
+<body>
+
+<div id="qunit"></div>
+
+</body>
+</html>
