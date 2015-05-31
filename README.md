@@ -12,29 +12,32 @@ Return value is always
 
 ##Simple
 ```
-var oldObject =  {"path1": [{"oldVariableName1": 1}]};
-var map = [{"_path": "path1", "newValue1": "oldVariableName1"}];
+var oldObject =  {
+	"path1": [
+		{
+			"oldVariableName1": 1
+		}
+	]
+};
+var map = [
+	{
+		"_path": "path1", 
+		"newValue1": "oldVariableName1"
+	}
+];
 mapArray(map, oldObject);
 ```
-Return value
-```
-{"newValue1": 1}
-```
 
-##Simple with functions calls
+##Simple with functions calls ´
 ```
 var oldObject =  {"path1": [{"oldVariableName1": "1"}]};
 var map = [{"_path": "path1", "newValue1": "parseInt(oldVariableName1)"}];
 mapArray(map, oldObject);
 ```
-Return value
-```
-{"newValue1": 1}
-```
 
 ##Multiple values
 ```
-var oldObject =  {"path1": [{"oldVariableName1": 1, "oldVariableName2": "Hello"}, {"oldVariableName1": 2}]};
+var oldObject =  [{"path1": [{"oldVariableName1": 1, "oldVariableName2": "Hello"}, {"oldVariableName1": 2}]}];
 var map = [{"_path": "path1", "newValue1": "oldVariableName1", "newValue2": "oldVariableName2"}];
 mapArray(map, oldObject);
 ```
@@ -51,10 +54,6 @@ Return value
 var oldObject =  {"path1": {"path2": [{"oldVariableName1": 1}]}};
 var map = [{"_path": "path1.path2", "newValue1": "oldVariableName1"}];
 mapArray(map, oldObject);
-```
-Return value
-```
-{"newValue1": 1}
 ```
 
 ###Complex dot syntax with [i]
