@@ -1,9 +1,11 @@
 APIMapper
 =========
 
-Javascript mapper for JSON
+Javascript mapper for JSON. Transforms any JSON into another schema. 
 
-Examples:
+Arrays are dealt with automatically: If no parameter is give, the first object is returned.
+
+#Examples:
 
 Return value is always
 ```
@@ -19,26 +21,59 @@ var oldObject =  {
 		}
 	]
 };
+
 var map = [
 	{
 		"_path": "path1", 
 		"newValue1": "oldVariableName1"
 	}
 ];
+
 mapArray(map, oldObject);
 ```
 
 ##Simple with functions calls ´
 ```
-var oldObject =  {"path1": [{"oldVariableName1": "1"}]};
-var map = [{"_path": "path1", "newValue1": "parseInt(oldVariableName1)"}];
+var oldObject =  {
+	"path1": [
+		{
+			"oldVariableName1": "1"
+		}
+	]
+};
+
+var map = [
+	{
+		"_path": "path1", 
+		"newValue1": "parseInt(oldVariableName1)"
+	}
+];
+
 mapArray(map, oldObject);
 ```
 
-##Multiple values
+##Multiple values and arrays for input
 ```
-var oldObject =  [{"path1": [{"oldVariableName1": 1, "oldVariableName2": "Hello"}, {"oldVariableName1": 2}]}];
-var map = [{"_path": "path1", "newValue1": "oldVariableName1", "newValue2": "oldVariableName2"}];
+var oldObject = {
+	"path1": [
+		{
+			"oldVariableName1": 1, 
+			"oldVariableName2": "Hello"
+		}, 
+		{
+			"oldVariableName1": 2
+		}
+	]
+};
+
+var map = [
+	{
+		"_path": "path1", 
+		"newValue1": "oldVariableName1",
+		"newValue2": "oldVariableName2"
+	}
+];
+
 mapArray(map, oldObject);
 ```
 Return value
@@ -51,19 +86,52 @@ Return value
 
 ##Simple dot syntax
 ```
-var oldObject =  {"path1": {"path2": [{"oldVariableName1": 1}]}};
-var map = [{"_path": "path1.path2", "newValue1": "oldVariableName1"}];
+var oldObject =  {
+	"path1": {
+		"path2": [
+			{
+				"oldVariableName1": 1
+			}
+		]
+	}
+};
+
+var map = [
+	{
+		"_path": "path1.path2", 
+		"newValue1": "oldVariableName1"
+	}
+];
+
 mapArray(map, oldObject);
 ```
 
 ###Complex dot syntax with [i]
 ```
-var oldObject =  {"path1": [{"path2": [{"oldVariableName1": 1}]}]};
-var map = [{"_path": "path1[0].path2", "newValue1": "oldVariableName1"}];
+var oldObject =  {
+	"path1": [
+		{
+			"path2": [
+				{
+					"oldVariableName1": 1
+				}
+			]
+		}
+	]
+};
+
+var map = [
+	{
+		"_path": "path1[0].path2",
+		"newValue1": "oldVariableName1"
+	}
+];
+
 mapArray(map, oldObject);
 ```
 
-##Todo
+#Todos
+Filter on array object
 - [last()]
 - [last()-1]
 - [position()<3]
@@ -75,3 +143,7 @@ mapArray(map, oldObject);
 - [price==35.00]
 - [price!=35.00]
 - [price<35.00]
+
+#License
+
+APIMapper is released under the MIT license. See LICENSE for details.
