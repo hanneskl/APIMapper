@@ -100,7 +100,7 @@ mapArray(map, oldObject);
 
 Return value
 
-```
+```javascript
 [
 	{"newValue1": 1, newValue2: "Hello"}, 
 	{"newValue1": 2, newValue2: undefined}
