@@ -3,11 +3,11 @@ APIMapper
 
 Javascript mapper for JSON. Transforms any JSON into another schema. 
 
-Arrays are dealt with automatically: If no parameter is give, the first object is returned.
+Arrays are dealt with automatically: If no addtional parameter is given, the first object is returned.
 
 #Examples:
 
-Return value is always
+Return object in these examples is always:
 ```
 {"newValue1": 1}
 ```
@@ -84,7 +84,7 @@ Return value
 ]
 ```
 
-##Simple dot syntax
+##Simple dot syntax for deeper path structures
 ```
 var oldObject =  {
 	"path1": {
@@ -106,7 +106,7 @@ var map = [
 mapArray(map, oldObject);
 ```
 
-###Complex dot syntax with [i]
+###Complex dot syntax with [i] for deeper path structures and arrays
 ```
 var oldObject =  {
 	"path1": [
@@ -143,6 +143,9 @@ Filter on array object
 - [price==35.00]
 - [price!=35.00]
 - [price<35.00]
+
+#Testing
+Please add qunit tests before adding new funtionality. 
 
 #License
 
