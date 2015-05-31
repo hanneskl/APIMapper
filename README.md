@@ -1,15 +1,30 @@
 APIMapper
 =========
 
-Javascript mapper for JSON. Transforms any JSON into another schema. 
+APIMapper is a simple javascript mapper for JSON objects and transforms any JSON into another schema. This is used in javascript and node.js transformations of API data.
 
 Arrays are dealt with automatically: If no addtional parameter is given, the first object is returned.
 
+The function is
+```
+mapArray(map: Object, oldObject: Object)
+```
+
+The map object is an Array with an mapping element or an mapping element itself:
+```
+{
+	"_path": (String) Path to the input property with dot and bracket syntax. i.e. foo.bar[0].fox[12].rabbit
+	OutputPropertyName (String) : InputPropertyName (String)
+}
+```
+
 #Examples:
 
-Return object in these examples is always:
+Return object in these examples is:
 ```
-{"newValue1": 1}
+{
+	"newValue1": 1
+}
 ```
 
 ##Simple
@@ -131,18 +146,24 @@ mapArray(map, oldObject);
 ```
 
 #Todos
-Filter on array object
+1. Filter on array object
 - [last()]
 - [last()-1]
 - [position()<3]
 - [lang]
 - [!lang]
-- [lang='en']
+- [lang=='en']
 - [lang!='en']
 - [price>35.00]
 - [price==35.00]
 - [price!=35.00]
 - [price<35.00]
+
+2. Add the ability to add constants to the returned object
+2.1 Add conditions on constants
+
+#Quality
+Please use JSHint for code quality.
 
 #Testing
 Please add qunit tests before adding new funtionality. 
