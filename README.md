@@ -1,6 +1,8 @@
 APIMapper
 =========
 
+[![Join the chat at https://gitter.im/hanneskl/APIMapper](https://badges.gitter.im/hanneskl/APIMapper.svg)](https://gitter.im/hanneskl/APIMapper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 APIMapper is a simple javascript mapper for JSON objects and transforms any JSON into another schema. This is used in javascript and node.js transformations of API data.
 
 Arrays are dealt with automatically: If no addtional parameter is given, the first object is returned.
